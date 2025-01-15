@@ -1,0 +1,45 @@
+name: cicada-version
+description: "Action to get the cicada version that is matching the current branch. Returns a fallback if no matching branch is found."
+
+inputs:
+  fallback:
+    description: The fallback that is returned if there's no matching branch
+    default: trunk
+    required: false
+
+outputs:
+  cicada-version:
+    description: The matching cicada version or fallback
+    value: ${{ steps.get-version.outputs.cicada-version }}
+
+runs:
+  using: "composite"
+  steps:
+    - name: Get cicada version
+      id: get-version
+      shell: bash
+      run: |
+        if [[ -n "${{ github.head_ref }}" ]]; then
+          ref="refs/heads/${{ github.head_ref }}"
+        else
+          ref="${{ github.ref }}"
+        fi
+
+        echo "Local ref: $ref"
+
+        remote_ref=$(git ls-remote --heads "https://github.com/xchanming/cicada" "$ref" | cut -f 2)
+        if [[ -n "$remote_ref" ]]; then
+          version="${remote_ref#"refs/heads/"}"
+        else
+          remote_ref=$(git ls-remote --heads "https://github.com/xchanming/cicada" refs/heads/${{ github.base_ref }} | cut -f 2)
+          if [[ -n "$remote_ref" ]]; then
+            version="${remote_ref#"refs/heads/"}"
+          else
+            echo "No matching branch found, using fallback"
+            version="${{ inputs.fallback }}"
+          fi
+        fi
+
+        echo "Matching cicada version: $version"
+
+        echo "cicada-version=$version" >> "$GITHUB_OUTPUT"
