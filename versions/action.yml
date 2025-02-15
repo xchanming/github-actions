@@ -7,7 +7,7 @@ branding:
 inputs:
   major:
     description: Current major prefix like v6.6.
-    default: v6.6.
+    default: v6.7.
 
 outputs:
   first-version:
@@ -27,7 +27,7 @@ outputs:
 runs:
   using: "composite"
   steps:
-    - name: Get cicada version
+    - name: Get xchanming version
       id: get-versions
       shell: bash
       env:

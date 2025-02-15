@@ -6,15 +6,15 @@ on:
           description: 'Your extension name'
           required: true
           type: string
-        cicadaVersion:
+        xchanmingVersion:
           description: |
-            With the default `.auto`, the workflow tries to find a cicada version using the cicada-version action.
+            With the default `.auto`, the workflow tries to find a xchanming version using the xchanming-version action.
 
-            For example, if the current ref is next-1234, it will try to find the ref next-1234 in xchanming/cicada. If there's no matching ref, it will use cicadaVersionFallback
+            For example, if the current ref is next-1234, it will try to find the ref next-1234 in xchanming/xchanming. If there's no matching ref, it will use xchanmingVersionFallback
           required: false
           type: string
           default: '.auto'
-        cicadaVersionFallback:
+        xchanmingVersionFallback:
           required: false
           type: string
           default: trunk
@@ -24,16 +24,16 @@ jobs:
     name: ESLint
     runs-on: ubuntu-latest
     steps:
-      - uses: xchanming/github-actions/cicada-version@main
+      - uses: xchanming/github-actions/xchanming-version@main
         with:
-          fallback: ${{ inputs.cicadaVersionFallback }}
+          fallback: ${{ inputs.xchanmingVersionFallback }}
         id: version
-        if: ${{ inputs.cicadaVersion == '.auto' }}
-      - name: Clone Cicada
+        if: ${{ inputs.xchanmingVersion == '.auto' }}
+      - name: Clone XChanMing
         uses: actions/checkout@v4
         with:
-          repository: xchanming/cicada
-          ref: ${{ steps.version.outputs.cicada-version || inputs.cicadaVersion }}
+          repository: xchanming/xchanming
+          ref: ${{ steps.version.outputs.xchanming-version || inputs.xchanmingVersion }}
 
       - name: Clone Extension
         uses: actions/checkout@v4

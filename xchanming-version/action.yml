@@ -1,5 +1,5 @@
-name: cicada-version
-description: "Action to get the cicada version that is matching the current branch. Returns a fallback if no matching branch is found."
+name: xchanming-version
+description: "Action to get the xchanming version that is matching the current branch. Returns a fallback if no matching branch is found."
 
 inputs:
   fallback:
@@ -8,14 +8,14 @@ inputs:
     required: false
 
 outputs:
-  cicada-version:
-    description: The matching cicada version or fallback
-    value: ${{ steps.get-version.outputs.cicada-version }}
+  xchanming-version:
+    description: The matching xchanming version or fallback
+    value: ${{ steps.get-version.outputs.xchanming-version }}
 
 runs:
   using: "composite"
   steps:
-    - name: Get cicada version
+    - name: Get xchanming version
       id: get-version
       shell: bash
       run: |
@@ -27,11 +27,11 @@ runs:
 
         echo "Local ref: $ref"
 
-        remote_ref=$(git ls-remote --heads "https://github.com/xchanming/cicada" "$ref" | cut -f 2)
+        remote_ref=$(git ls-remote --heads "https://github.com/xchanming/xchanming" "$ref" | cut -f 2)
         if [[ -n "$remote_ref" ]]; then
           version="${remote_ref#"refs/heads/"}"
         else
-          remote_ref=$(git ls-remote --heads "https://github.com/xchanming/cicada" refs/heads/${{ github.base_ref }} | cut -f 2)
+          remote_ref=$(git ls-remote --heads "https://github.com/xchanming/xchanming" refs/heads/${{ github.base_ref }} | cut -f 2)
           if [[ -n "$remote_ref" ]]; then
             version="${remote_ref#"refs/heads/"}"
           else
@@ -40,6 +40,6 @@ runs:
           fi
         fi
 
-        echo "Matching cicada version: $version"
+        echo "Matching xchanming version: $version"
 
-        echo "cicada-version=$version" >> "$GITHUB_OUTPUT"
+        echo "xchanming-version=$version" >> "$GITHUB_OUTPUT"
